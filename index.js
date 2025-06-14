@@ -50,13 +50,15 @@ async function resize(url) {
                 "Accept": "image/avif,image/webp,image/apng,*/*",
             }
         })
-        const headers = new Headers(image.headers);
-        headers.set("Server", "NextImageTransformation");
+        if (!image.ok) throw new Error(image.statusText)
+        const headers = new Headers(image.headers)
+        headers.set('Server', 'NextImageCybervoid')
         return new Response(image.body, {
-            headers
+          status: image.status,
+          headers,
         })
     } catch (e) {
         console.log(e)
-        return new Response("Error resizing image")
+        return new Response('Source image is unreachable', { status: 502 })
     }
 }
